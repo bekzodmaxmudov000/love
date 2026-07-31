@@ -227,12 +227,30 @@ section{
 .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:920px;width:100%;z-index:1;perspective:1000px;}
 .gal-card{
   aspect-ratio:1;border-radius:8px;position:relative;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;padding:18px;
+  display:flex;align-items:flex-end;justify-content:flex-start;padding:18px;
   border:1px solid var(--line);
   transform-style:preserve-3d;
   transition:transform 0.15s ease-out, box-shadow 0.3s ease;
 }
 .gal-card:hover{box-shadow:0 24px 46px rgba(0,0,0,0.45);}
+/* Real photo, if present, fills the card completely */
+.gal-card img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  /* Change --pos on each card (inline style="--pos:50% 30%") to move the focal point
+     up/down so faces aren't cropped oddly — first number = left/right, second = up/down. */
+  object-position:var(--pos,center);
+  display:block;
+  z-index:0;
+}
+/* Gradient so the caption stays readable whether the card shows a photo or a color */
+.gal-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 45%, rgba(18,10,15,0.8) 100%);
+  z-index:1;
+  pointer-events:none;
+}
 .gal-shine{
   position:absolute;inset:0;
   background:linear-gradient(120deg,transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
@@ -240,10 +258,11 @@ section{
   background-position:120% 120%;
   transition:background-position 0.6s ease;
   pointer-events:none;
+  z-index:2;
 }
 .gal-card:hover .gal-shine{background-position:-20% -20%;}
-.gal-card span{font-family:'Dancing Script',cursive;font-size:21px;color:var(--cream);z-index:1;line-height:1.4;transform:translateZ(30px);}
-.gal-card::after{content:"♥";position:absolute;bottom:14px;right:16px;color:rgba(247,236,223,0.35);font-size:16px;}
+.gal-card span{font-family:'Dancing Script',cursive;font-size:21px;color:var(--cream);z-index:2;line-height:1.4;transform:translateZ(30px);}
+.gal-card::after{content:"♥";position:absolute;bottom:14px;right:16px;color:rgba(247,236,223,0.5);font-size:16px;z-index:2;}
 .gal-card:nth-child(1){background:linear-gradient(135deg,#5c2438,#8b3a52);}
 .gal-card:nth-child(2){background:linear-gradient(135deg,#3a1826,#a53355);}
 .gal-card:nth-child(3){background:linear-gradient(135deg,#6b2f3f,#d8a869);}
@@ -406,7 +425,7 @@ footer{padding:54px 20px 64px;text-align:center;color:var(--rose-gold);font-size
 <section id="timeline">
   <div class="section-eyebrow reveal">Bizning yo'limiz</div>
   <h2 class="section-title reveal">Har bir lahza <em>bir xazina</em></h2>
-  <p class="section-desc reveal">Har bir sana, Har bir kadr bizniki.</p>
+  <p class="section-desc reveal">Har bir sana, har bir kadr Bizniki</p>
   <div class="tl-wrap" id="tlWrap">
     <div class="tl-line-bg"></div>
     <div class="tl-line-fill" id="tlFill"></div>
@@ -441,14 +460,19 @@ footer{padding:54px 20px 64px;text-align:center;color:var(--rose-gold);font-size
 <section id="gallery">
   <div class="section-eyebrow reveal">Xotiralar</div>
   <h2 class="section-title reveal">Sen bilan <em>har bir kadr</em></h2>
-  <p class="section-desc reveal">Bu joylarda suratlar to'radi - hozircha bular kichik xotiralar sifatida turibdi.</p>
+  <p class="section-desc reveal">Bu joylarga o'zingizning suratlaringizni qo'ying — hozircha ular kichik xotiralar sifatida turibdi.</p>
+  <!--
+    Rasm qo'shish uchun: har bir .gal-card ichiga <img src="rasm.jpg" alt=""> qo'shing (pastda namuna bor).
+    Agar yuz yoki muhim qism kesilib qolsa, style="--pos:50% 30%" dagi ikkinchi sondan o'ynang:
+    0% = rasmning yuqori qismini ko'rsatadi, 100% = pastki qismini. Masalan yuz tepada bo'lsa --pos:50% 15%.
+  -->
   <div class="gallery-grid" id="galleryGrid">
-    <div class="gal-card"><div class="gal-shine"></div><span>birinchi uchrashuv</span></div>
-    <div class="gal-card"><div class="gal-shine"></div><span>eng yaxshi kulgi</span></div>
-    <div class="gal-card"><div class="gal-shine"></div><span>quyosh botishi</span></div>
-    <div class="gal-card"><div class="gal-shine"></div><span>sokin oqshom</span></div>
-    <div class="gal-card"><div class="gal-shine"></div><span>uzoq sayohat</span></div>
-    <div class="gal-card"><div class="gal-shine"></div><span>oddiy kun</span></div>
+    <div class="gal-card" style="--pos:50% 30%"><img src="mubin.jpg" alt=""><div class="gal-overlay"></div><div class="gal-shine"></div><span>birinchi uchrashuv</span></div>
+    <div class="gal-card" style="--pos:50% 30%"><img src="mubin2.jpg" alt=""><div class="gal-overlay"></div><div class="gal-shine"></div><span>eng yaxshi kulgi</span></div>
+    <div class="gal-card" style="--pos:50% 30%"><img src="mubin3.jpg" alt=""><div class="gal-overlay"></div><div class="gal-shine"></div><span>quyosh botishi</span></div>
+    <div class="gal-card" style="--pos:50% 50%"><img src="mubin4.jpg" alt=""><div class="gal-overlay"></div><div class="gal-shine"></div><span>sokin oqshom</span></div>
+    <div class="gal-card" style="--pos:50% 40%"><img src="mubin5.jpg" alt=""><div class="gal-overlay"></div><div class="gal-shine"></div><span>uzoq sayohat</span></div>
+    <div class="gal-card" style="--pos:50% 50%"><img src="mubin6.jpg" alt=""><div class="gal-overlay"></div><div class="gal-shine"></div><span>oddiy kun</span></div>
   </div>
 </section>
 
